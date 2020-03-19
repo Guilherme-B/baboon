@@ -71,11 +71,7 @@ This type of pipeline relies on the definition of a **report** and its **tasks**
     }
 
 Generated DAG:
-```mermaid
-graph LR
-A[Query Task] -- Task 1 --> B((CSV Task))
-E[Query Task] -- Task 2  --> B
-B -- Task 3 --> D[Email Task]
+[![](https://mermaid.ink/img/eyJjb2RlIjoiZ3JhcGggVERcblxuQVtRdWVyeSBUYXNrXSAtLSBUYXNrIDEgLS0-IEIoKENTViBUYXNrKSlcbkVbUXVlcnkgVGFza10gLS0gVGFzayAyICAtLT4gQlxuQiAtLSBUYXNrIDMgLS0-IERbRW1haWwgVGFza11cblx0XHRcdFx0XHQiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlfQ)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiZ3JhcGggVERcblxuQVtRdWVyeSBUYXNrXSAtLSBUYXNrIDEgLS0-IEIoKENTViBUYXNrKSlcbkVbUXVlcnkgVGFza10gLS0gVGFzayAyICAtLT4gQlxuQiAtLSBUYXNrIDMgLS0-IERbRW1haWwgVGFza11cblx0XHRcdFx0XHQiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlfQ)
 
 ```
 
