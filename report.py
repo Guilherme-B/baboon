@@ -22,56 +22,56 @@ class ReportFrequency(Enum):
     
 @unique
 class WeekDay(Enum):
-    MONDAY = auto(),
-    TUESDAY = auto(),
-    WEDNESDAY = auto(),
-    THURSDAY = auto(),
-    FRIDAY = auto(),
-    SATURDAY = auto(),
-    SUNDAY = auto()
-    
-@dataclass
-class Query:
-    name: str
-    order: int
-    statement: str
+    MONDAY = 0,
+    TUESDAY = 1,
+    WEDNESDAY = 2,
+    THURSDAY = 3,
+    FRIDAY = 4,
+    SATURDAY = 5,
+    SUNDAY = 6
 
 class Report():
         
-    def __init__(self, json_str: str):
+    def __init__(self):
+        self._id: int = None
+        self._name: str = None
+        self._enabled: bool = None
         
-        if json_str is None:
-            print(__name__, '::__init__ invalid input, ', json_str)
-            return 
-
-        self._id: int = json_str.get("id", -1)
-        self._name: str = json_str.get("name", None)
-        self._enabled: bool = json_str.get("enabled", False)
+        self._tasks: Dict[Dict, Task] = dict()
+        self._graph: Bonobo.Graph = None
         
         self._frequency: ReportFrequency = None
         self._frequency_day: Union[None, WeekDay] = None
+    
+    def from_json(json_str: str) -> None:
         
-        self._tasks: Dict[Dict, Task] = dict()
+        if json_str is None:
+            print(__name__, '::from_json() invalid input, ', json_str)
+            return 
+
+        self._id = json_str.get("id", -1)
+        self._name = json_str.get("name", None)
+        self._enabled = json_str.get("enabled", False)
 
         try:
             freq: str = json_str.get("frequency", None)
             self._frequency = ReportFrequency[freq.upper()]
         except (AttributeError, KeyError) as e:
-            print(__class__.__name__, '::__init__ invalid frequency input, ', freq, ' ,', e)
+            print(__class__.__name__, '::from_json() invalid frequency input, ', freq, ' ,', e)
             return
     
         try:
             weekday: str = json_str.get("weekday", None)
             self._frequency_day = WeekDay[weekday.upper()]
         except (AttributeError, KeyError) as e:
-            print(__name__, '::__init__ invalid weekly input, ', weekday, ' ,', e)
+            print(__name__, '::from_json() invalid weekly input, ', weekday, ' ,', e)
             return 
 
         self._generate_tasks(json_str)
         
         if not self._validate(True):
             return
-          
+        
     def _generate_tasks(self, data_json: str) -> None:
         """[summary]
         
@@ -109,12 +109,12 @@ class Report():
             parents: List[int] = tsk.parents
 
             if parents is not None:
-                #print(tsk.id, ":", len(parents))
                 for parent_id in parents:
                     tasks[parent_id].add_child(tsk.id)
-                    #print("Adding child:", tsk.id, "; to parent:", parent_id)
         
 
+        self._generate_graph()
+        
     def _validate(self, verbose:bool = False) -> bool:
 
         if self._id < 0:
@@ -136,7 +136,7 @@ class Report():
               
         return True
     
-    def generate_graph(self) -> Union[bonobo.Graph, None]:
+    def _generate_graph(self) -> None:
         """[Generate the Bonobo.Graph for the current Report]
         
             The report generation follows the rules:
@@ -179,13 +179,50 @@ class Report():
         #sorted_tasks: Dict[int, Task] = {k: v for k,v in sorted(self._tasks.items(), key = lambda item: item[0])}
         #graph.add_chain(*sorted_tasks.values())
 
-        return graph if len(graph.nodes) > 0 else None
+        self_graph = graph if len(graph.nodes) > 0 else None
     
+    @property
+    def id(self) -> int:
+        return self._id
+    
+    @id.setter
+    def id(self, new_id: int) -> None:
+        self._id = new_id
+        
+    @property
+    def graph(self) -> Union[None, bonobo.Graph]:
+        return self._graph
+    
+    @graph.setter
+    def graph(self, new_graph: bonobo.Graph) -> None:
+        if new_graph is None:
+            return
+        
+        self._graph = new_graph
         
     @property
     def enabled(self) -> bool:
         return self._enabled    
     
+    @enabled.setter
+    def enabled(self, new_enabled: bool = True) -> None:
+        self._enabled = new_enabled
+    
     @property
     def name(self) -> str:
         return self._name
+    
+    @name.setter
+    def name(self, new_name: str) -> None:
+        self._name = new_name
+    
+    def add_tasks(self, tasks: List[Task]) -> None:
+        if tasks is None:
+            print(__name__, '::add_tasks(...) no tasks have been supplied.')
+            return None
+        
+        for task in tasks:
+            if task is not None:
+                self._tasks[task.id] = task
+        
+        

@@ -38,13 +38,13 @@ class Task():
     def id(self) -> int:
         return self._id
     
+    @id.setter
+    def id(self, new_id: int) -> None:
+        self._id = new_id
+    
     @property
     def parents(self) -> Union[List[int], None]:
         return self._parents
-    
-    @property 
-    def id(self) -> id:
-        return self._id 
     
     @property
     def children(self) -> Union[List[int], None]:

@@ -5,7 +5,7 @@ from os import path
 from collections import defaultdict
 from typing import AnyStr, DefaultDict, Dict, List
 
-from config_manager import ConfigManager
+from config_manager import ConfigManager, ConfigType
 from report import Report
 
 import bonobo
@@ -23,7 +23,6 @@ class ReportManager():
 
     __instance = None
     __singleton_lock = threading.Lock()
-    __config: Dict[str, Ditct[str, str]] = {}
     
     _reports: DefaultDict[str, list] = defaultdict(list)
 
@@ -78,7 +77,12 @@ class ReportManager():
 
     
     def _parse_reports(self) -> None:
-        reports_full_path: str = './config/reports.json'
+        reports_full_path: str = ConfigManager.instance().get_config(ConfigType.Reports)
+        
+        if reports_full_path is None:
+            print(__name__, '::_parse_reports() could not retrieve report JSON definition, ', reports_full_path)
+            
+            return
 
         if path.exists(reports_full_path):
 
@@ -92,7 +96,8 @@ class ReportManager():
                         for department in data:
                             for report_data in data[department]:
                                 
-                                report_instance: Report = Report(report_data)
+                                report_instance: Report = Report()
+                                report_instance.from_json(report_data)
         
                                 if report_instance is not None:
                                     self.append(department, report_instance)
@@ -118,7 +123,7 @@ class ReportManager():
                               report.name)
                         continue
 
-                    graph: Bonobo.graph = report.generate_graph()
+                    graph: Bonobo.graph = report.graph
 
                     if graph is None:
                         print(__name__,

@@ -12,7 +12,7 @@ class EmailHandler(Handler):
         pass
     
     def run(self, *args: List, **kwargs: Dict) -> bool:
-        config = ConfigManager.instance().get_configuration(ConfigType.SMTP)
+        config = ConfigManager.instance().get_config(ConfigType.SMTP)
         
         if config is None:
             print(__name__,'::run() could not retrieve SMTP configuration, ', kwargs)
