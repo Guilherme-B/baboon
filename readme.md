@@ -1,4 +1,5 @@
-﻿# Welcome to Baboon
+
+# Welcome to Baboon
 
 Baboon aims at filling the gap between ETL libraries and manual reports.
 For many users, ETL pipelines are a way of reducing manual labor when it comes to reporting. But even using Bonobo and other powerful libraries, one still has to create a script for each report and a wrapper around it. That's exactly what Baboon (original heh?) aims at solving.
@@ -71,13 +72,7 @@ This type of pipeline relies on the definition of a **report** and its **tasks**
     }
 
 Generated DAG:
-```mermaid
-graph LR
-A[Query Task] -- Task 1 --> B((CSV Task))
-E[Query Task] -- Task 2  --> B
-B -- Task 3 --> D[Email Task]
-
-```
+[![](https://mermaid.ink/img/eyJjb2RlIjoiZ3JhcGggTFJcbkFbUXVlcnkgVGFza10gLS0gVGFzayAxIC0tPiBCKChDU1YgVGFzaykpXG5FW1F1ZXJ5IFRhc2tdIC0tIFRhc2sgMiAgLS0-IEJcbkIgLS0gVGFzayAzIC0tPiBEW0VtYWlsIFRhc2tdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifSwidXBkYXRlRWRpdG9yIjpmYWxzZX0)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiZ3JhcGggTFJcbkFbUXVlcnkgVGFza10gLS0gVGFzayAxIC0tPiBCKChDU1YgVGFzaykpXG5FW1F1ZXJ5IFRhc2tdIC0tIFRhc2sgMiAgLS0-IEJcbkIgLS0gVGFzayAzIC0tPiBEW0VtYWlsIFRhc2tdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifSwidXBkYXRlRWRpdG9yIjpmYWxzZX0)
 
 ## Manual Pipelines
 
