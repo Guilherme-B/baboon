@@ -49,8 +49,5 @@ class ConfigManager():
                 if section == config_type.value:
                     self.__config[section] = dict(parser.items(section))
             
-    def get_config(self, config_type: ConfigType, category: str = None) -> Union[None, Dict[str, str], str]:
-        if category:
-            return self.__config.get(config_type.value).get(category)
-           
-        return self.__config.get(config_type.value)
+    def get_config(self, config_type: ConfigType) -> Union[None, Dict[str, str]]:
+        return self.__config.get(config_type)

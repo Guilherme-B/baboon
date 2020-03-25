@@ -2,7 +2,7 @@
 # Welcome to Baboon
 
 Baboon aims at filling the gap between ETL libraries and manual reports.
-By using Baboon, users can create ETL pipelines in a simple fashion as means of reducing manual labor when it comes to reporting. Even using Bonobo and other powerful libraries, one still has to create a script for each report and a wrapper around it. That's exactly what Baboon (original heh?) aims at solving.
+For many users, ETL pipelines are a way of reducing manual labor when it comes to reporting. But even using Bonobo and other powerful libraries, one still has to create a script for each report and a wrapper around it. That's exactly what Baboon (original heh?) aims at solving.
 
 # Pipeline Types
 
@@ -15,6 +15,8 @@ To run an automated pipeline, accessing the ReporManager's run() method will suf
     ReportManager(auto=True).instance().run()
     
 This type of pipeline relies on the definition of a **report** and its **tasks** in a **JSON** file, which is automatically parsed, sorted and has its **DAG** built by Baboon. 
+ > Note: Due to a bug in Bonobo (see ticket [#370](https://github.com/python-bonobo/bonobo/issues/370)) automatic DAG generation is suspended.
+ 
 
  For instance, the following **JSON** definition - which produces an Excel file with two tabs, one for each query and sends the file via email - would generate the subsequent **Bonobo DAG**:
  

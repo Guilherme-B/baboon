@@ -43,7 +43,7 @@ class Report():
         self._frequency: ReportFrequency = None
         self._frequency_day: Union[None, WeekDay] = None
     
-    def from_json(self, json_str: str) -> None:
+    def from_json(json_str: str) -> None:
         
         if json_str is None:
             print(__name__, '::from_json() invalid input, ', json_str)
@@ -153,17 +153,33 @@ class Report():
         # Child : graph.add_chain(child1, _output = parent)
         tasks: Dict[int, Task] = self._tasks
         
+        # Start by adding all the Tasks as Orhphan nodes
+        for tsk in tasks.values():
+            graph.add_node(tsk)
+
         # Assess the nodes' relationships and connect them as input or output (or both)
         for node in tasks.values():
             if node.children is not None:
                 for child_id in node.children:
-                    if child_id is not None:  
-                        graph >> node >> tasks[child_id]            
-            elif node.parents is None:
-                graph >> node
+                    if child_id is not None:
+                        # For some reason _input isn't working as expected, remove it
+                        graph.add_chain(_input = tasks[child_id], _output= node)   
+                        #graph.add_chain(tasks[child_id], _output= node)     
+            else:
+                graph.add_chain(node, _input=None)          
+                        
+        '''for task in sorted_tasks.values():
 
+            graph.add_chain(
+                *((task(),) if task else ()),
+                #_input = sorted_tasks[task.depends_on] if task.depends_on else ()
+            )'''
+        
+        # Old method: single straight graph
+        #sorted_tasks: Dict[int, Task] = {k: v for k,v in sorted(self._tasks.items(), key = lambda item: item[0])}
+        #graph.add_chain(*sorted_tasks.values())
 
-        self._graph = graph if len(graph.nodes) > 0 else None
+        self_graph = graph if len(graph.nodes) > 0 else None
     
     @property
     def id(self) -> int:

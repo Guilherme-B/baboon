@@ -77,7 +77,7 @@ class ReportManager():
 
     
     def _parse_reports(self) -> None:
-        reports_full_path: str = ConfigManager.instance().get_config(ConfigType.Reports, 'location')
+        reports_full_path: str = ConfigManager.instance().get_config(ConfigType.Reports)
         
         if reports_full_path is None:
             print(__name__, '::_parse_reports() could not retrieve report JSON definition, ', reports_full_path)
