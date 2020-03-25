@@ -1,0 +1,2 @@
+# bonobo etl framework
+bonobo>=0.7.0rc3
